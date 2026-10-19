@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/parcelpath}
+    username: ${DB_USER:parcelpath}
+    password: ${DB_PASSWORD:parcelpath}
