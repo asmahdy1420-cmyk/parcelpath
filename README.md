@@ -8,6 +8,30 @@ shipment at once; a recipient's tracking page must never show internal data. Thi
 handles each of those explicitly and keeps the rules in a small, framework-free domain layer
 that is easy to read and test.
 
+## Screenshots
+
+The public tracking view is a JSON endpoint, so it is shown as a real request and response. All captures come from the built jar running locally with the in-memory H2 database and a few seeded requests, not production data.
+
+![Swagger UI listing the shipment and carrier webhook endpoints](docs/screenshots/swagger-ui.png)
+
+Swagger UI served by the app at `/swagger-ui.html`.
+
+![curl creating a shipment, 201 Created with an ETag](docs/screenshots/create-shipment.png)
+
+Creating a shipment returns 201, the tracking number and an `ETag` holding the version.
+
+![The same carrier webhook sent twice: 201 then 200 with Idempotent-Replayed true](docs/screenshots/webhook-replay.png)
+
+The same carrier scan sent twice with one `Idempotency-Key`: the retry returns 200 and the original event.
+
+![RFC 7807 problem response for DELIVERED on a CREATED shipment](docs/screenshots/invalid-transition.png)
+
+An invalid transition is rejected with `422` and an RFC 7807 problem body.
+
+![Public tracking response with only allow-listed fields](docs/screenshots/public-tracking.png)
+
+The public tracking response, built from an allow-list of fields.
+
 ## Features
 
 - **Explicit state machine** in pure Kotlin (`domain/ShipmentStateMachine.kt`): a sealed
